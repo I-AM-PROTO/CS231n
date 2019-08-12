@@ -38,10 +38,18 @@ class TwoLayerNet(object):
         - output_size: The number of classes C.
         """
         self.params = {}
+        self.grads = {}
+        """
         self.params['W1'] = std * np.random.randn(input_size, hidden_size)
         self.params['b1'] = np.zeros(hidden_size)
         self.params['W2'] = std * np.random.randn(hidden_size, output_size)
         self.params['b2'] = np.zeros(output_size)
+        """
+        
+        self.params['W1'] = np.ones((input_size, hidden_size))/1000
+        self.params['b1'] = np.ones(hidden_size)/1000
+        self.params['W2'] = np.ones((hidden_size, output_size))/1000
+        self.params['b2'] = np.ones(output_size)/1000
 
     def loss(self, X, y=None, reg=0.0):
         """
@@ -123,7 +131,6 @@ class TwoLayerNet(object):
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         # Backward pass: compute gradients
-        grads = {}
         #############################################################################
         # TODO: Compute the backward pass, computing the derivatives of the weights #
         # and biases. Store the results in the grads dictionary. For example,       #
@@ -144,14 +151,14 @@ class TwoLayerNet(object):
         dWb1 = np.dot(np.transpose(X), dH)
         dWb1 += 2 * reg * Wb1
         
-        grads['W1'] = dWb1[0:-1]
-        grads['b1'] = dWb1[-1]
-        grads['W2'] = dWb2[0:-1]
-        grads['b2'] = dWb2[-1]
+        self.grads['W1'] = dWb1[0:-1]
+        self.grads['b1'] = dWb1[-1]
+        self.grads['W2'] = dWb2[0:-1]
+        self.grads['b2'] = dWb2[-1]
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        return loss, grads
+        return loss, self.grads
 
     def train(self, X, y, X_val, y_val,
               learning_rate=1e-3, learning_rate_decay=0.95,
